@@ -2,4 +2,17 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#6200EE</color>
+
+    <!-- Secondary color for the app -->
+    <color name="colorSecondary">#03DAC6</color>
+
+    <!-- Text color -->
+    <color name="textColorPrimary">#000000</color>
+
+    <!-- Hint text color -->
+    <color name="textColorSecondary">#757575</color>
+
+    <!-- Background color -->
+    <color name="backgroundColor">#FFFFFF</color>
 </resources>
