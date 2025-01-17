@@ -2,37 +2,32 @@ package com.example.myapplication
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_main)
 
-        val emailEditText: EditText = findViewById(R.id.etEmail)
-        val passwordEditText: EditText = findViewById(R.id.etPassword)
-        val rememberMeCheckBox: CheckBox = findViewById(R.id.cbRememberMe)
-        val forgotPasswordText: TextView = findViewById(R.id.tvForgotPassword)
-        val nextButton: Button = findViewById(R.id.btnNext)
+        // Initialize buttons
+        val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val btnLogin = findViewById<Button>(R.id.btnNext)
 
-        nextButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            if(email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter your Email and Password", Toast.LENGTH_SHORT)
-                    .show()
-            }else{
-                Toast.makeText(this, "Welcome back, $email!", Toast.LENGTH_SHORT).show()
-            }
+        btnLogin.setOnClickListener {
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent looping
+            startActivity(loginIntent)
+            finish() // Finish current activity so the user can't go back to it
         }
-        forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Forgot Password clicked", Toast.LENGTH_SHORT).show()
+
+
+        // Navigate to Register Activity
+        btnRegister.setOnClickListener {
+            val registerIntent = Intent(this, RegisterActivity::class.java)
+            registerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent looping
+            startActivity(registerIntent)
+            finish() // Finish current activity so the user can't go back to it
         }
     }
-    }
+}
