@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Style for TextInputEditText -->
     <style name="TextInputEditTextStyle" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="android:textSize">16sp</item>
@@ -9,7 +9,7 @@
     </style>
 
     <!-- Style for TextInputLayout -->
-    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" tools:ignore="ResourceCycle">
         <item name="boxBackgroundColor">?attr/colorSurface</item>
         <item name="boxStrokeColor">?attr/colorPrimary</item>
         <item name="android:textColorHint">?attr/colorOnSurface</item>
