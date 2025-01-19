@@ -7,48 +7,73 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
 
 class LoginActivity : AppCompatActivity() {
+
+    // Lazy initialization for views
+    private val emailInputLayout: TextInputLayout by lazy { findViewById(R.id.textInputLayoutEmail) }
+    private val emailEditText: EditText by lazy { findViewById(R.id.etEmail) }
+    private val passwordInputLayout: TextInputLayout by lazy { findViewById(R.id.textInputLayoutPassword) }
+    private val passwordEditText: EditText by lazy { findViewById(R.id.etPassword) }
+    private val loginButton: Button by lazy { findViewById(R.id.btnNext) }
+    private val forgotPasswordText: TextView by lazy { findViewById(R.id.tvForgotPassword) }
+    private val registerButton: Button by lazy { findViewById(R.id.btnRegister) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Initialize views
-        val emailEditText: EditText = findViewById(R.id.etEmail)
-        val passwordEditText: EditText = findViewById(R.id.etPassword)
-        val loginButton: Button = findViewById(R.id.btnNext)
-        val forgotPasswordText: TextView = findViewById(R.id.tvForgotPassword)
+        loginButton.setOnClickListener { handleLogin() }
+        registerButton.setOnClickListener { navigateToRegister() }
+        forgotPasswordText.setOnClickListener { handleForgotPassword() }
+    }
 
-        // Handle login button click
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
+    private fun handleLogin() {
+        val email = emailEditText.text.toString().trim()
+        val password = passwordEditText.text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter your Email and Password", Toast.LENGTH_SHORT).show()
+        // Validate input
+        if (email.isEmpty()) {
+            emailInputLayout.error = "Email cannot be empty"
+        } else if (!CredentialsManager.isEmailValid(email)) {
+            emailInputLayout.error = "Invalid email format"
+        } else {
+            emailInputLayout.error = null
+        }
+
+        if (password.isEmpty()) {
+            passwordInputLayout.error = "Password cannot be empty"
+        } else if (!CredentialsManager.isValidPassword(password)) {
+            passwordInputLayout.error = "Password must be at least 8 characters long"
+        } else {
+            passwordInputLayout.error = null
+        }
+
+        // Check for hardcoded credentials
+        if (emailInputLayout.error == null && passwordInputLayout.error == null) {
+            if (CredentialsManager.isHardcodedCredentials(email, password)) {
+                navigateToMainActivity()
             } else {
-                Toast.makeText(this, "Welcome back, $email!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        val btnLogin = findViewById<Button>(R.id.btnNext)
-        val btnRegister = findViewById<Button>(R.id.btnRegister)
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 
-//        btnLogin.setOnClickListener {
-//            // Show login success message (you can customize this)
-//            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-//        }
-        btnRegister.setOnClickListener {
-            val registerIntent = Intent(this, RegisterActivity::class.java)
-            registerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent looping
-            startActivity(registerIntent)
-            finish() // Finish the login activity so the user can't navigate back to it
-        }
+    private fun navigateToRegister() {
+        val registerIntent = Intent(this, RegisterActivity::class.java)
+        registerIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(registerIntent)
+        finish()
+    }
 
-        // Handle forgot password click
-        forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Forgot Password clicked", Toast.LENGTH_SHORT).show()
-        }
+    private fun handleForgotPassword() {
+        Toast.makeText(this, "Forgot Password clicked", Toast.LENGTH_SHORT).show()
     }
 }

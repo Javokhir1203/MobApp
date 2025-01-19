@@ -3,43 +3,55 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
 
 class RegisterActivity : AppCompatActivity() {
+
+    private val fullNameInputLayout: TextInputLayout by lazy { findViewById(R.id.textInputLayoutFullName) }
+    private val emailInputLayout: TextInputLayout by lazy { findViewById(R.id.textInputLayoutEmail) }
+    private val passwordInputLayout: TextInputLayout by lazy { findViewById(R.id.textInputLayoutPassword) }
+    private val registerButton by lazy { findViewById<Button>(R.id.btnN) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Initialize views
-        val fullNameEditText: EditText = findViewById(R.id.et_full_name)
-        val emailEditText: EditText = findViewById(R.id.et_email)
-        val phoneEditText: EditText = findViewById(R.id.et_phone_number)
-        val passwordEditText: EditText = findViewById(R.id.et_password)
-        val registerButton: Button = findViewById(R.id.btnN)
+        registerButton.setOnClickListener { handleRegistration() }
+    }
 
-        // Handle register button click
-        registerButton.setOnClickListener {
-            val fullName = fullNameEditText.text.toString()
-            val email = emailEditText.text.toString()
-            val phone = phoneEditText.text.toString()
-            val password = passwordEditText.text.toString()
+    private fun handleRegistration() {
+        val fullName = fullNameInputLayout.editText?.text.toString().trim()
+        val email = emailInputLayout.editText?.text.toString().trim()
+        val password = passwordInputLayout.editText?.text.toString().trim()
 
-            if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Account created for $fullName!", Toast.LENGTH_SHORT).show()
+        if (fullName.isEmpty()) {
+            fullNameInputLayout.error = "Full name cannot be empty"
+            return
+        } else {
+            fullNameInputLayout.error = null
+        }
+
+        val registrationResult = CredentialsManager.register(email, password)
+        if (registrationResult.isSuccess) {
+            Toast.makeText(this, "Account created for $fullName!", Toast.LENGTH_SHORT).show()
+            navigateToLogin()
+        } else {
+            val errorMessage = registrationResult.exceptionOrNull()?.message ?: "Unknown error"
+            if (errorMessage.contains("Email")) {
+                emailInputLayout.error = errorMessage
+            } else if (errorMessage.contains("Password")) {
+                passwordInputLayout.error = errorMessage
             }
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         }
-        val btnBackToLogin = findViewById<Button>(R.id.button2)
+    }
 
-        btnBackToLogin.setOnClickListener {
-            val loginIntent = Intent(this, LoginActivity::class.java)
-            loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent looping
-            startActivity(loginIntent)
-            finish() // Finish current activity so the user can't navigate back to RegisterActivity
-        }
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

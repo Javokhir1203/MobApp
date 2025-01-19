@@ -25,13 +25,20 @@ object CredentialsManager {
         return password.length >= 8
     }
 
-    fun registerUser(email: String, password: String): Boolean {
-        if (isEmailAlreadyUsed(email)) {
-            return false
+    fun register(email: String, password: String): Result<String> {
+        val normalizedEmail = email.lowercase()
+
+        return when {
+            !isEmailValid(email) -> Result.failure(Exception("Invalid email format"))
+            !isValidPassword(password) -> Result.failure(Exception("Password must be at least 8 characters long"))
+            registeredUsers.containsKey(normalizedEmail) -> Result.failure(Exception("Email is already taken"))
+            else -> {
+                registeredUsers[normalizedEmail] = password
+                Result.success("Registration successful")
+            }
         }
-        registeredUsers[email.lowercase()] = password
-        return true
     }
+
 
     fun validateLogin(email: String, password: String): Boolean {
         return registeredUsers[email.lowercase()] == password
