@@ -4,11 +4,10 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/fragmentBText"
+        android:id="@+id/fragment_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Exploring Fragment B"
-        android:textSize="26sp"
-        android:textColor="#008080"
+        android:text="Fragment B"
+        android:textSize="24sp"
         android:layout_gravity="center" />
 </FrameLayout>

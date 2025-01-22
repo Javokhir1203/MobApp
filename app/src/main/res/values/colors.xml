@@ -2,17 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#6200EE</color>
+    <color name="editTextColor">#33C4C4C4</color>
+    <color name="buttonBackgroundColor">#6C63FF</color>
 
-    <!-- Secondary color for the app -->
-    <color name="colorSecondary">#03DAC6</color>
-
-    <!-- Text color -->
-    <color name="textColorPrimary">#000000</color>
-
-    <!-- Hint text color -->
-    <color name="textColorSecondary">#757575</color>
-
-    <!-- Background color -->
-    <color name="backgroundColor">#FFFFFF</color>
+    <color name="default_screen_bg">#f9f9f9</color>
+    <color name="rounded_container_bg">#222222</color>
+    <color name="rounded_container_border">#3b3f44</color>
+    <color name="light_gray_header_color">#646663</color>
 </resources>

@@ -14,13 +14,8 @@ class FragmentA : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_a, container, false)
-
-        // Find the TextView by its ID
-        val textView = view.findViewById<TextView>(R.id.textViewA)
-
-        // Set custom text to the TextView
-        textView.text = "Welcome to Fragment A"
-
+        val textView = view.findViewById<TextView>(R.id.fragment_text)
+        textView.text = "Fragment A"
         return view
     }
 }
